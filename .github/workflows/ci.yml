@@ -4,6 +4,8 @@ on:
   pull_request:
     branches:
       - main
+  schedule:
+    - cron: '0 2 * * 1'  # Run weekly on Monday at 2 AM
 
 jobs:
   lint-format-test:
@@ -28,3 +30,16 @@ jobs:
 
       - name: Run tests
         run: npm test
+
+  dependabot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Create Dependabot pull request
+        uses: github/dependabot-action@v1
+        with:
+          directory: '/'
+          package-manager: 'npm'
+          versioning-strategy: 'increase'
